@@ -22,7 +22,7 @@ public static class TaskManager
         {
             try
             {
-                action.Invoke();
+                action();
             }
             catch (Exception e)
             {
