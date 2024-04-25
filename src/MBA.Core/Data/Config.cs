@@ -10,6 +10,7 @@ public class Config
     public List<TaskType> TasksExcept { get; set; } = new() { };
     public UIConfig UI { get; set; } = new();
     public CoreConfig Core { get; set; } = new();
+    public WebhookConfig Webhook { get; set; } = new();
     public GameConfig Game { get; set; } = new();
     public DailyConfig Daily { get; set; } = new();
     public WeeklyConfig Weekly { get; set; } = new();
@@ -27,6 +28,27 @@ public class UIConfig
     public Uri? ProxyUri => string.IsNullOrEmpty(Proxy)
         ? null
         : new Uri(Proxy.Contains("://") ? Proxy : $"http://{Proxy}");
+}
+
+public class WebhookConfig
+{
+    public bool Enable { get; set; } = false;
+    public string Url { get; set; } = "127.0.0.1";
+    public string Method { get; set; } = "GET";
+    public string BodyExampleFilePath { get; set; } = "";
+    public Dictionary<string, string> Headers { get; set; } = new();
+
+    [JsonIgnore]
+    public string Body
+    {
+        get
+        {
+            if (File.Exists(BodyExampleFilePath))
+                return File.ReadAllText(BodyExampleFilePath);
+            else
+                return "#{report}";
+        }
+    }
 }
 
 public class CoreConfig
